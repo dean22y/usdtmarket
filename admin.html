@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>어드민 - 상품 등록</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">USDT MARKET</div>
+    <nav>
+      <a href="index.html">상품</a>
+      <a href="admin.html">어드민</a>
+    </nav>
+  </header>
+
+  <section class="split" id="admin-auth">
+    <div class="panel">
+      <h2>어드민 로그인</h2>
+      <form id="login-form">
+        <div class="field">
+          <label for="admin-email">이메일</label>
+          <input id="admin-email" name="email" type="email" required />
+        </div>
+        <div class="field">
+          <label for="admin-password">비밀번호</label>
+          <input id="admin-password" name="password" type="password" required />
+        </div>
+        <button class="button" type="submit">로그인</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>로그인 안내</h2>
+      <p>현재는 데모용 로그인 화면입니다. 실제 서비스에서는 이메일/비밀번호 검증과 권한 관리를 연결하세요.</p>
+    </div>
+  </section>
+
+  <section class="split" id="admin-content" style="display: none;">
+    <div class="panel">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>상품 등록</h2>
+        <button class="button secondary" id="logout">로그아웃</button>
+      </div>
+      <form id="admin-form">
+        <div class="field">
+          <label for="name">상품명</label>
+          <input id="name" name="name" required />
+        </div>
+        <div class="field">
+          <label for="description">상품 설명</label>
+          <textarea id="description" name="description" required></textarea>
+        </div>
+        <div class="field">
+          <label for="priceUsdt">가격 (USDT)</label>
+          <input id="priceUsdt" name="priceUsdt" type="number" min="0" step="0.01" required />
+        </div>
+        <div class="field">
+          <label for="cardUrl">카드 결제 리다이렉트 URL</label>
+          <input id="cardUrl" name="cardUrl" type="url" required />
+        </div>
+        <div class="field">
+          <label for="usdtWallet">USDT 수신 지갑 주소</label>
+          <input id="usdtWallet" name="usdtWallet" required />
+        </div>
+        <div class="field">
+          <label for="usdtDiscount">USDT 할인율 N%</label>
+          <input id="usdtDiscount" name="usdtDiscount" type="number" min="0" max="100" step="1" required />
+        </div>
+        <div class="field">
+          <label for="imageCardFile">상품 카드 이미지 업로드</label>
+          <input id="imageCardFile" name="imageCardFile" type="file" accept="image/*" />
+        </div>
+        <div class="field">
+          <label for="imageGalleryFile">갤러리 이미지 업로드</label>
+          <input id="imageGalleryFile" name="imageGalleryFile" type="file" accept="image/*" />
+        </div>
+        <div class="field">
+          <label for="detailImageFile">상세 이미지 업로드</label>
+          <input id="detailImageFile" name="detailImageFile" type="file" accept="image/*" />
+        </div>
+        <button class="button" id="admin-submit" type="submit">상품 등록</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>상품 리스트</h2>
+      <div class="notice">상품은 구매 후 1일 뒤 일괄 배송되며, 인터뷰 참여 시 3만원 쿠폰 지급.</div>
+      <div class="list" id="admin-list" style="margin-top: 16px;"></div>
+    </div>
+  </section>
+
+  <div class="overlay" id="data-overlay"></div>
+  <div class="modal" id="data-modal">
+    <header style="display: flex; justify-content: space-between; align-items: center;">
+      <h3 style="margin: 0;">데이터 로그</h3>
+      <button class="button secondary" id="data-close" type="button">닫기</button>
+    </header>
+    <div id="data-body" style="margin-top: 12px;"></div>
+  </div>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>

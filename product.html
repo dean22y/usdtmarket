@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>상품 상세</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">USDT MARKET</div>
+    <nav>
+      <a href="index.html">상품</a>
+      <a href="admin.html">어드민</a>
+    </nav>
+  </header>
+
+  <section class="split" id="product-detail"></section>
+
+  <div id="overlay" class="overlay"></div>
+  <div id="usdt-modal" class="modal">
+    <header style="display: flex; align-items: center; justify-content: space-between;">
+      <strong>USDT 결제</strong>
+      <button class="button secondary" id="close-modal">닫기</button>
+    </header>
+    <div id="usdt-body"></div>
+  </div>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>

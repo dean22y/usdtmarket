@@ -1,0 +1,5084 @@
+﻿const STORAGE_KEY = "usdt_products_v1";
+
+
+
+
+
+
+
+const ADMIN_KEY = "usdt_admin_authed";
+
+
+
+
+
+
+
+const METRICS_KEY = "usdt_metrics_v1";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const USDT_CONTRACT_ADDRESS = "0xd077a400968890eacc75cdc901f0356c943e4fdb";
+
+
+
+
+
+
+
+const CONFIRMATIONS_REQUIRED = 1;
+
+
+
+
+
+
+
+const KAIA_MAINNET_NETWORK_ID = "8217";
+
+
+
+
+
+
+
+const KAIA_MAINNET_CHAIN_ID_HEX = "0x2019";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const seedProducts = [
+
+
+
+
+
+
+
+  {
+
+
+
+
+
+
+
+    id: "p-001",
+
+
+
+
+
+
+
+    name: "프리미엄 콘텐츠 패키지",
+
+
+
+
+
+
+
+    description: "전문가 인터뷰 기반 리서치 요약본과 추가 자료가 포함됩니다.",
+
+
+
+
+
+
+
+    priceUsdt: 10,
+
+
+
+
+
+
+
+    cardUrl: "https://example.com/pay/card/p-001",
+
+
+
+
+
+
+
+    usdtWallet: "0x0000000000000000000000000000000000000000",
+
+
+
+
+
+
+
+    usdtDiscount: 12,
+
+
+
+
+
+
+
+    imageCardUrl: "./assets/olive_card.png",
+
+
+
+
+
+
+
+    imageGalleryUrl: "./assets/olive_gallery.png",
+
+
+
+
+
+
+
+    detailImageUrl: "",
+
+
+
+
+
+
+
+    active: true,
+
+
+
+
+
+
+
+    createdAt: new Date().toISOString(),
+
+
+
+
+
+
+
+  },
+
+
+
+
+
+
+
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function loadProducts() {
+
+
+
+
+
+
+
+  const raw = localStorage.getItem(STORAGE_KEY);
+
+
+
+
+
+
+
+  if (!raw) {
+
+
+
+
+
+
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(seedProducts));
+
+
+
+
+
+
+
+    return [...seedProducts];
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+  try {
+
+
+
+
+
+
+
+    return JSON.parse(raw);
+
+
+
+
+
+
+
+  } catch (error) {
+
+
+
+
+
+
+
+    console.error("Failed to parse products", error);
+
+
+
+
+
+
+
+    return [...seedProducts];
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function saveProducts(products) {
+
+
+
+
+
+
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function readFileAsDataURL(file) {
+
+
+
+
+
+
+
+  if (!file) return Promise.resolve("");
+
+
+
+
+
+
+
+  return new Promise((resolve, reject) => {
+
+
+
+
+
+
+
+    const reader = new FileReader();
+
+
+
+
+
+
+
+    reader.onload = () => resolve(reader.result);
+
+
+
+
+
+
+
+    reader.onerror = () => reject(new Error("이미지 파일을 읽을 수 없습니다."));
+
+
+
+
+
+
+
+    reader.readAsDataURL(file);
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function formatUsdt(amount) {
+
+
+
+
+
+
+
+  return `${Number(amount).toFixed(2)} USDT`;
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getDiscountedAmount(price, discount) {
+
+
+
+
+
+
+
+  const discounted = price * (1 - discount / 100);
+
+
+
+
+
+
+
+  return Math.max(discounted, 0);
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function toTokenBaseUnits(amount, decimals) {
+
+
+
+
+
+
+
+  const fixed = Number(amount).toFixed(decimals);
+
+
+
+
+
+
+
+  const parts = fixed.split(".");
+
+
+
+
+
+
+
+  const whole = parts[0];
+
+
+
+
+
+
+
+  const fraction = (parts[1] || "").padEnd(decimals, "0");
+
+
+
+
+
+
+
+  const combined = `${whole}${fraction}`.replace(/^0+/, "");
+
+
+
+
+
+
+
+  return combined === "" ? "0" : combined;
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function qs(selector) {
+
+
+
+
+
+
+
+  return document.querySelector(selector);
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function renderProductList() {
+
+
+
+
+
+
+
+  const grid = qs("#product-grid");
+
+
+
+
+
+
+
+  if (!grid) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const products = loadProducts().filter((product) => product.active);
+
+
+
+
+
+
+
+  grid.innerHTML = "";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  products.forEach((product, index) => {
+
+
+
+
+
+
+
+    const card = document.createElement("div");
+
+
+
+
+
+
+
+    card.className = "card fade-in";
+
+
+
+
+
+
+
+    card.style.animationDelay = `${index * 0.08}s`;
+
+
+
+
+
+
+
+    card.innerHTML = `
+
+
+
+
+
+
+
+      <div class="tag">USDT ${product.usdtDiscount}% 할인</div>
+
+
+
+
+
+
+
+      <h3>${product.name}</h3>
+
+
+
+
+
+
+
+      <p>${product.description}</p>
+
+
+
+
+
+
+
+      <div class="price">${formatUsdt(product.priceUsdt)}</div>
+
+
+
+
+
+
+
+      <a class="button" href="product.html?id=${product.id}">상품 보기</a>
+
+
+
+
+
+
+
+    `;
+
+
+
+
+
+
+
+    grid.appendChild(card);
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function renderAdmin() {
+
+
+
+
+
+
+
+  const form = qs("#admin-form");
+
+
+
+
+
+
+
+  if (!form) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const list = qs("#admin-list");
+
+
+
+
+
+
+
+  const dataOverlay = qs("#data-overlay");
+
+
+
+
+
+
+
+  const dataModal = qs("#data-modal");
+
+
+
+
+
+
+
+  const dataClose = qs("#data-close");
+
+
+
+
+
+
+
+  const dataBody = qs("#data-body");
+
+
+
+
+
+
+
+  let editingId = null;
+
+
+
+
+
+
+
+  const getField = (name) => {
+
+
+
+
+
+
+
+    const field = form.elements.namedItem(name);
+
+
+
+
+
+
+
+    if (!field) return null;
+
+
+
+
+
+
+
+    return field;
+
+
+
+
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const renderList = () => {
+
+
+
+
+
+
+
+    const products = loadProducts();
+
+
+
+
+
+
+
+    list.innerHTML = "";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    products.forEach((product) => {
+
+
+
+
+
+
+
+      const item = document.createElement("div");
+
+
+
+
+
+
+
+      item.className = "list-item";
+
+
+
+
+
+
+
+      item.innerHTML = `
+
+
+
+
+
+
+
+        <div>
+
+
+
+
+
+
+
+          <strong>${product.name}</strong>
+
+
+
+
+
+
+
+          <div><span>${formatUsdt(product.priceUsdt)}</span> · <span>할인 ${product.usdtDiscount}%</span></div>
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+        <div class="actions">
+
+
+
+
+
+
+
+          <button class="button secondary" data-action="edit" data-id="${product.id}">편집</button>
+
+
+
+
+
+
+
+          <button class="button secondary" data-action="toggle" data-id="${product.id}">
+
+
+
+
+
+
+
+            ${product.active ? "비활성" : "활성"}
+
+
+
+
+
+
+
+          </button>
+
+
+
+
+
+
+
+          <button class="button secondary" data-action="data" data-id="${product.id}">데이터</button>
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+      `;
+
+
+
+
+
+
+
+      list.appendChild(item);
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const resetForm = () => {
+
+
+
+
+
+
+
+    form.reset();
+
+
+
+
+
+
+
+    editingId = null;
+
+
+
+
+
+
+
+    qs("#admin-submit").textContent = "상품 등록";
+
+
+
+
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  form.addEventListener("submit", async (event) => {
+
+
+
+
+
+
+
+    event.preventDefault();
+
+
+
+
+
+
+
+    const formData = new FormData(form);
+
+
+
+
+
+
+
+    const [cardDataUrl, galleryDataUrl, detailDataUrl] = await Promise.all([
+
+
+
+
+
+
+
+      readFileAsDataURL(formData.get("imageCardFile")),
+
+
+
+
+
+
+
+      readFileAsDataURL(formData.get("imageGalleryFile")),
+
+
+
+
+
+
+
+      readFileAsDataURL(formData.get("detailImageFile")),
+
+
+
+
+
+
+
+    ]);
+
+
+
+
+
+
+
+    const products = loadProducts();
+
+
+
+
+
+
+
+    const existingProduct = editingId ? products.find((item) => item.id === editingId) : null;
+
+
+
+
+
+
+
+    const product = {
+
+
+
+
+
+
+
+      id: editingId || `p-${Date.now()}`,
+
+
+
+
+
+
+
+      name: formData.get("name").trim(),
+
+
+
+
+
+
+
+      description: formData.get("description").trim(),
+
+
+
+
+
+
+
+      priceUsdt: Number(formData.get("priceUsdt")),
+
+
+
+
+
+
+
+      cardUrl: formData.get("cardUrl").trim(),
+
+
+
+
+
+
+
+      usdtWallet: formData.get("usdtWallet").trim(),
+
+
+
+
+
+
+
+      usdtDiscount: Number(formData.get("usdtDiscount")),
+
+
+
+
+
+
+
+      detailImageUrl: detailDataUrl || (existingProduct ? existingProduct.detailImageUrl : ""),
+
+
+
+
+
+
+
+      imageCardUrl: cardDataUrl || (existingProduct ? existingProduct.imageCardUrl : ""),
+
+
+
+
+
+
+
+      imageGalleryUrl: galleryDataUrl || (existingProduct ? existingProduct.imageGalleryUrl : ""),
+
+
+
+
+
+
+
+      active: true,
+
+
+
+
+
+
+
+      createdAt: new Date().toISOString(),
+
+
+
+
+
+
+
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const existingIndex = products.findIndex((item) => item.id === product.id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (existingIndex >= 0) {
+
+
+
+
+
+
+
+      products[existingIndex] = { ...products[existingIndex], ...product };
+
+
+
+
+
+
+
+    } else {
+
+
+
+
+
+
+
+      products.unshift(product);
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    saveProducts(products);
+
+
+
+
+
+
+
+    renderList();
+
+
+
+
+
+
+
+    resetForm();
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  list.addEventListener("click", (event) => {
+
+
+
+
+
+
+
+    const button = event.target.closest("button");
+
+
+
+
+
+
+
+    if (!button) return;
+
+
+
+
+
+
+
+    const action = button.dataset.action;
+
+
+
+
+
+
+
+    const id = button.dataset.id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const products = loadProducts();
+
+
+
+
+
+
+
+    const product = products.find((item) => item.id === id);
+
+
+
+
+
+
+
+    if (!product) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (action === "edit") {
+
+
+
+
+
+
+
+      editingId = id;
+
+
+
+
+
+
+
+      const nameField = getField("name");
+
+
+
+
+
+
+
+      const descriptionField = getField("description");
+
+
+
+
+
+
+
+      const priceField = getField("priceUsdt");
+
+
+
+
+
+
+
+      const cardUrlField = getField("cardUrl");
+
+
+
+
+
+
+
+      const walletField = getField("usdtWallet");
+
+
+
+
+
+
+
+      const discountField = getField("usdtDiscount");
+
+
+
+
+
+
+
+      const cardFileField = getField("imageCardFile");
+
+
+
+
+
+
+
+      const galleryFileField = getField("imageGalleryFile");
+
+
+
+
+
+
+
+      const detailFileField = getField("detailImageFile");
+
+
+
+
+
+
+
+      const detailUrlField = getField("detailImageUrl");
+
+
+
+
+
+
+
+      const cardUrlImageField = getField("imageCardUrl");
+
+
+
+
+
+
+
+      const galleryUrlImageField = getField("imageGalleryUrl");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      if (nameField) nameField.value = product.name;
+
+
+
+
+
+
+
+      if (descriptionField) descriptionField.value = product.description;
+
+
+
+
+
+
+
+      if (priceField) priceField.value = product.priceUsdt;
+
+
+
+
+
+
+
+      if (cardUrlField) cardUrlField.value = product.cardUrl;
+
+
+
+
+
+
+
+      if (walletField) walletField.value = product.usdtWallet;
+
+
+
+
+
+
+
+      if (discountField) discountField.value = product.usdtDiscount;
+
+
+
+
+
+
+
+      if (detailUrlField) detailUrlField.value = product.detailImageUrl || "";
+
+
+
+
+
+
+
+      if (cardUrlImageField) cardUrlImageField.value = product.imageCardUrl || "";
+
+
+
+
+
+
+
+      if (galleryUrlImageField) galleryUrlImageField.value = product.imageGalleryUrl || "";
+
+
+
+
+
+
+
+      if (cardFileField) cardFileField.value = "";
+
+
+
+
+
+
+
+      if (galleryFileField) galleryFileField.value = "";
+
+
+
+
+
+
+
+      if (detailFileField) detailFileField.value = "";
+
+
+
+
+
+
+
+      qs("#admin-submit").textContent = "상품 수정";
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (action === "toggle") {
+
+
+
+
+
+
+
+      product.active = !product.active;
+
+
+
+
+
+
+
+      saveProducts(products);
+
+
+
+
+
+
+
+      renderList();
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (action === "data") {
+
+
+
+
+
+
+
+      openDataModal(product);
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  renderList();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (dataClose && dataOverlay) {
+
+
+
+
+
+
+
+    dataClose.addEventListener("click", closeDataModal);
+
+
+
+
+
+
+
+    dataOverlay.addEventListener("click", closeDataModal);
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function openDataModal(product) {
+
+
+
+
+
+
+
+    if (!dataModal || !dataOverlay || !dataBody) return;
+
+
+
+
+
+
+
+    dataBody.innerHTML = renderMetricsTable(product.id, product.name);
+
+
+
+
+
+
+
+    dataOverlay.classList.add("show");
+
+
+
+
+
+
+
+    dataModal.classList.add("show");
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function closeDataModal() {
+
+
+
+
+
+
+
+    if (!dataModal || !dataOverlay) return;
+
+
+
+
+
+
+
+    dataOverlay.classList.remove("show");
+
+
+
+
+
+
+
+    dataModal.classList.remove("show");
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function initAdminAuth() {
+
+
+
+
+
+
+
+  const loginForm = qs("#login-form");
+
+
+
+
+
+
+
+  const authSection = qs("#admin-auth");
+
+
+
+
+
+
+
+  const contentSection = qs("#admin-content");
+
+
+
+
+
+
+
+  const logoutBtn = qs("#logout");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (!loginForm || !authSection || !contentSection) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const setAuthed = (value) => {
+
+
+
+
+
+
+
+    if (value) {
+
+
+
+
+
+
+
+      localStorage.setItem(ADMIN_KEY, "true");
+
+
+
+
+
+
+
+      authSection.style.display = "none";
+
+
+
+
+
+
+
+      contentSection.style.display = "grid";
+
+
+
+
+
+
+
+    } else {
+
+
+
+
+
+
+
+      localStorage.removeItem(ADMIN_KEY);
+
+
+
+
+
+
+
+      authSection.style.display = "grid";
+
+
+
+
+
+
+
+      contentSection.style.display = "none";
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (localStorage.getItem(ADMIN_KEY) === "true") {
+
+
+
+
+
+
+
+    setAuthed(true);
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  loginForm.addEventListener("submit", (event) => {
+
+
+
+
+
+
+
+    event.preventDefault();
+
+
+
+
+
+
+
+    setAuthed(true);
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (logoutBtn) {
+
+
+
+
+
+
+
+    logoutBtn.addEventListener("click", () => setAuthed(false));
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function renderProductDetail() {
+
+
+
+
+
+
+
+  const container = qs("#product-detail");
+
+
+
+
+
+
+
+  if (!container) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const params = new URLSearchParams(window.location.search);
+
+
+
+
+
+
+
+  const id = params.get("id");
+
+
+
+
+
+
+
+  const product = loadProducts().find((item) => item.id === id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (!product) {
+
+
+
+
+
+
+
+    container.innerHTML = "<p>상품을 찾을 수 없습니다.</p>";
+
+
+
+
+
+
+
+    return;
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const discountedAmount = getDiscountedAmount(product.priceUsdt, product.usdtDiscount);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  container.innerHTML = `
+
+
+
+
+
+
+
+    <div class="panel fade-in">
+
+
+
+
+
+
+
+      <h2>${product.name}</h2>
+
+
+
+
+
+
+
+      <p>${product.description}</p>
+
+
+
+
+
+
+
+      <div class="price">${formatUsdt(product.priceUsdt)}</div>
+
+
+
+
+
+
+
+      <div class="notice">USDT 결제 시 ${product.usdtDiscount}% 즉시 할인</div>
+
+
+
+
+
+
+
+      <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
+
+
+
+
+
+
+
+        <button class="button" id="card-pay">카드로 결제</button>
+
+
+
+
+
+
+
+        <button class="button secondary" id="usdt-pay">USDT로 결제</button>
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div class="panel fade-in" style="animation-delay: 0.1s;">
+
+
+
+
+
+
+
+      <h3>안내</h3>
+
+
+
+
+
+
+
+      <p>상품은 일괄 처리되며, 구매 후 1일 뒤 배송됩니다.</p>
+
+
+
+
+
+
+
+      <p>인터뷰 참여 시 3만원 쿠폰 지급</p>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+  `;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  qs("#card-pay").addEventListener("click", () => {
+
+
+
+
+
+
+
+    if (!product.cardUrl) {
+
+
+
+
+
+
+
+      alert("카드 결제 URL이 등록되지 않았습니다.");
+
+
+
+
+
+
+
+      return;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+    window.location.href = product.cardUrl;
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  qs("#usdt-pay").addEventListener("click", () => {
+
+
+
+
+
+
+
+    openUsdtModal(product, discountedAmount);
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function openUsdtModal(product, discountedAmount) {
+
+
+
+
+
+
+
+  const modal = qs("#usdt-modal");
+
+
+
+
+
+
+
+  const overlay = qs("#overlay");
+
+
+
+
+
+
+
+  const body = qs("#usdt-body");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  body.innerHTML = `
+
+
+
+
+
+
+
+    <p><strong>결제 금액</strong> ${formatUsdt(discountedAmount)} (할인 적용)</p>
+
+
+
+
+
+
+
+    <p><strong>수신 지갑</strong> ${product.usdtWallet}</p>
+
+
+
+
+
+
+
+    <p><strong>컨펌 기준</strong> 1컨펌 확인 완료 시 결제 완료</p>
+
+
+
+
+
+
+
+    <div style="margin-top: 14px; display: grid; gap: 10px;">
+
+
+
+
+
+
+
+      <button class="button" id="connect-wallet">USDT 결제하기</button>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <div id="tx-status" class="notice" style="margin-top: 16px; display: none;"></div>
+
+
+
+
+
+
+
+    <div id="wallet-help" class="notice" style="margin-top: 12px; display: none;"></div>
+
+
+
+
+
+
+
+    <div id="phone-form" style="margin-top: 16px; display: none;">
+
+
+
+
+
+
+
+      <label for="phone" class="field" style="margin-bottom: 12px;">
+
+
+
+
+
+
+
+        <span>휴대폰 번호 입력</span>
+
+
+
+
+
+
+
+        <input id="phone" type="tel" placeholder="010-0000-0000" />
+
+
+
+
+
+
+
+      </label>
+
+
+
+
+
+
+
+      <button class="button" id="complete">구매 완료</button>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+  `;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  overlay.classList.add("show");
+
+
+
+
+
+
+
+  modal.classList.add("show");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const connectBtn = qs("#connect-wallet");
+
+
+
+
+
+
+
+  const status = qs("#tx-status");
+
+
+
+
+
+
+
+  const help = qs("#wallet-help");
+
+
+
+
+
+
+
+  const phoneForm = qs("#phone-form");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  let connectedAccount = null;
+
+
+
+
+
+
+
+  let caver = null;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  connectBtn.addEventListener("click", async () => {
+
+
+
+
+
+
+
+    status.style.display = "block";
+
+
+
+
+
+
+
+    status.textContent = "Kaia Wallet 연결 중...";
+
+
+
+
+
+
+
+    help.style.display = "none";
+
+
+
+
+
+
+
+    connectBtn.textContent = "연결 중...";
+
+
+
+
+
+
+
+    connectBtn.disabled = true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    try {
+
+
+
+
+
+
+
+      const connection = await connectKaiaWallet();
+
+
+
+
+
+
+
+      connectedAccount = connection.account;
+
+
+
+
+
+
+
+      caver = connection.caver;
+
+
+
+
+
+
+
+      connectBtn.textContent = "결제 진행 중...";
+
+
+
+
+
+
+
+      status.textContent = "USDT 결제 트랜잭션 생성 중...";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      const txHash = await sendUsdtTransfer({
+
+
+
+
+
+
+
+        caver,
+
+
+
+
+
+
+
+        from: connectedAccount,
+
+
+
+
+
+
+
+        to: product.usdtWallet,
+
+
+
+
+
+
+
+        amount: discountedAmount,
+
+
+
+
+
+
+
+      });
+
+
+
+
+
+
+
+      status.textContent = `전송 완료 (TX: ${txHash.slice(0, 10)}...) → ${CONFIRMATIONS_REQUIRED}컨펌 확인 중`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      await waitForConfirmations(caver, txHash, CONFIRMATIONS_REQUIRED);
+
+
+
+
+
+
+
+      status.textContent = `${CONFIRMATIONS_REQUIRED}컨펌 확인 완료. 결제가 완료되었습니다.`;
+
+
+
+
+
+
+
+      phoneForm.style.display = "block";
+
+
+
+
+
+
+
+      connectBtn.textContent = "결제 완료";
+
+
+
+
+
+
+
+    } catch (error) {
+
+
+
+
+
+
+
+      connectBtn.textContent = "USDT 결제하기";
+
+
+
+
+
+
+
+      connectBtn.disabled = false;
+
+
+
+
+
+
+
+      status.textContent = error.message || "결제 처리 중 오류가 발생했습니다.";
+
+
+
+
+
+
+
+      help.style.display = "block";
+
+
+
+
+
+
+
+      help.innerHTML = `
+
+
+
+
+
+
+
+        <strong>팝업이 안 뜨는 경우</strong><br />
+
+
+
+
+
+
+
+        1) Kaia Wallet 확장 아이콘을 직접 열어 승인 요청이 있는지 확인<br />
+
+
+
+
+
+
+
+        2) 확장 프로그램의 사이트 액세스에 현재 주소를 허용<br />
+
+
+
+
+
+
+
+        3) 다른 지갑 확장(메타마스크 등) 잠시 비활성화<br />
+
+
+
+
+
+
+
+        4) https 도메인에서 접속 시 팝업 안정성 개선
+
+
+
+
+
+
+
+      `;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  qs("#complete").addEventListener("click", () => {
+
+
+
+
+
+
+
+    const phone = qs("#phone").value.trim();
+
+
+
+
+
+
+
+    if (!phone) {
+
+
+
+
+
+
+
+      alert("휴대폰 번호를 입력해주세요.");
+
+
+
+
+
+
+
+      return;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+    alert("결제가 완료되었습니다. 상품은 구매 후 1일 뒤 배송됩니다.");
+
+
+
+
+
+
+
+    closeModal();
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function closeModal() {
+
+
+
+
+
+
+
+  qs("#overlay").classList.remove("show");
+
+
+
+
+
+
+
+  qs("#usdt-modal").classList.remove("show");
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function connectKaiaWallet() {
+
+
+
+
+
+
+
+  const provider = window.klaytn;
+
+
+
+
+
+
+
+  if (!provider || !provider.isKaikas) {
+
+
+
+
+
+
+
+    throw new Error("Kaia Wallet이 설치되어 있지 않습니다.");
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  provider.autoRefreshOnNetworkChange = false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (provider._kaikas && provider._kaikas.isUnlocked) {
+
+
+
+
+
+
+
+    const unlocked = await provider._kaikas.isUnlocked();
+
+
+
+
+
+
+
+    if (!unlocked) {
+
+
+
+
+
+
+
+      throw new Error("Kaia Wallet을 열어 잠금을 해제한 뒤 다시 시도해주세요.");
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  let accounts = [];
+
+
+
+
+
+
+
+  if (provider.selectedAddress) {
+
+
+
+
+
+
+
+    accounts = [provider.selectedAddress];
+
+
+
+
+
+
+
+  } else {
+
+
+
+
+
+
+
+    if (provider._kaikas && provider._kaikas.isApproved) {
+
+
+
+
+
+
+
+      const approved = await provider._kaikas.isApproved();
+
+
+
+
+
+
+
+      if (!approved) {
+
+
+
+
+
+
+
+        console.warn("Kaia Wallet approval not found for this site.");
+
+
+
+
+
+
+
+      }
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    accounts = await withTimeout(
+
+
+
+
+
+
+
+      provider.enable(),
+
+
+
+
+
+
+
+      15000,
+
+
+
+
+
+
+
+      "지갑 승인 팝업이 보이지 않으면 Kaia Wallet 확장 프로그램을 열어 연결을 승인해주세요."
+
+
+
+
+
+
+
+    );
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+  const account = accounts && accounts[0];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (!account) {
+
+
+
+
+
+
+
+    throw new Error("지갑 계정을 불러오지 못했습니다.");
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  await ensureMainnet();
+
+
+
+
+
+
+
+  return { account, caver: getCaver() };
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getCaver() {
+
+
+
+
+
+
+
+  if (window.caver) {
+
+
+
+
+
+
+
+    return window.caver;
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+  if (window.Caver && window.klaytn) {
+
+
+
+
+
+
+
+    return new window.Caver(window.klaytn);
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+  throw new Error("Caver 라이브러리를 찾을 수 없습니다.");
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function ensureMainnet() {
+
+
+
+
+
+
+
+  const provider = window.klaytn;
+
+
+
+
+
+
+
+  if (!provider) return;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  if (provider.networkVersion === KAIA_MAINNET_NETWORK_ID) {
+
+
+
+
+
+
+
+    return;
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  try {
+
+
+
+
+
+
+
+    await provider.request({
+
+
+
+
+
+
+
+      method: "wallet_switchKlaytnChain",
+
+
+
+
+
+
+
+      params: [{ chainId: KAIA_MAINNET_CHAIN_ID_HEX }],
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+
+
+  } catch (error) {
+
+
+
+
+
+
+
+    throw new Error("Kaia 메인넷으로 전환해주세요.");
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function sendUsdtTransfer({ caver, from, to, amount }) {
+
+
+
+
+
+
+
+  if (!caver.utils.isAddress(to)) {
+
+
+
+
+
+
+
+    throw new Error("수신 지갑 주소가 올바르지 않습니다.");
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const tokenContract = new caver.klay.Contract(
+
+
+
+
+
+
+
+    [
+
+
+
+
+
+
+
+      {
+
+
+
+
+
+
+
+        constant: true,
+
+
+
+
+
+
+
+        inputs: [],
+
+
+
+
+
+
+
+        name: "decimals",
+
+
+
+
+
+
+
+        outputs: [{ name: "", type: "uint8" }],
+
+
+
+
+
+
+
+        type: "function",
+
+
+
+
+
+
+
+      },
+
+
+
+
+
+
+
+      {
+
+
+
+
+
+
+
+        constant: false,
+
+
+
+
+
+
+
+        inputs: [
+
+
+
+
+
+
+
+          { name: "recipient", type: "address" },
+
+
+
+
+
+
+
+          { name: "amount", type: "uint256" },
+
+
+
+
+
+
+
+        ],
+
+
+
+
+
+
+
+        name: "transfer",
+
+
+
+
+
+
+
+        outputs: [{ name: "", type: "bool" }],
+
+
+
+
+
+
+
+        type: "function",
+
+
+
+
+
+
+
+      },
+
+
+
+
+
+
+
+    ],
+
+
+
+
+
+
+
+    USDT_CONTRACT_ADDRESS
+
+
+
+
+
+
+
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const decimals = await tokenContract.methods.decimals().call();
+
+
+
+
+
+
+
+  const baseAmount = toTokenBaseUnits(amount, Number(decimals));
+
+
+
+
+
+
+
+  const gasLimit = await estimateTokenTransferGas({
+
+
+
+
+
+
+
+    caver,
+
+
+
+
+
+
+
+    from,
+
+
+
+
+
+
+
+    to,
+
+
+
+
+
+
+
+    contract: tokenContract,
+
+
+
+
+
+
+
+    amount: baseAmount,
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  return new Promise((resolve, reject) => {
+
+
+
+
+
+
+
+    const promi = tokenContract.methods.transfer(to, baseAmount).send({
+
+
+
+
+
+
+
+      from,
+
+
+
+
+
+
+
+      gas: gasLimit,
+
+
+
+
+
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    if (promi && typeof promi.on === "function") {
+
+
+
+
+
+
+
+      promi.on("transactionHash", resolve);
+
+
+
+
+
+
+
+      promi.on("error", reject);
+
+
+
+
+
+
+
+      return;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Promise.resolve(promi)
+
+
+
+
+
+
+
+      .then((receipt) => resolve(receipt && (receipt.transactionHash || receipt.txHash || "")))
+
+
+
+
+
+
+
+      .catch(reject);
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function estimateTokenTransferGas({ caver, from, to, contract, amount }) {
+
+
+
+
+
+
+
+  try {
+
+
+
+
+
+
+
+    const gas = await contract.methods.transfer(to, amount).estimateGas({ from });
+
+
+
+
+
+
+
+    return Math.floor(Number(gas) * 1.2);
+
+
+
+
+
+
+
+  } catch (error) {
+
+
+
+
+
+
+
+    console.warn("Failed to estimate gas, using fallback.", error);
+
+
+
+
+
+
+
+    return 300000;
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function waitForConfirmations(caver, txHash, confirmations) {
+
+
+
+
+
+
+
+  const receipt = await waitForReceipt(caver, txHash);
+
+
+
+
+
+
+
+  const targetBlock = Number(receipt.blockNumber) + confirmations;
+
+
+
+
+
+
+
+  const timeoutAt = Date.now() + 5 * 60 * 1000;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  while (Date.now() < timeoutAt) {
+
+
+
+
+
+
+
+    const currentBlock = await caver.klay.getBlockNumber();
+
+
+
+
+
+
+
+    if (Number(currentBlock) >= targetBlock) {
+
+
+
+
+
+
+
+      return;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  throw new Error("컨펌 확인 시간이 초과되었습니다.");
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+async function waitForReceipt(caver, txHash) {
+
+
+
+
+
+
+
+  const timeoutAt = Date.now() + 3 * 60 * 1000;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  while (Date.now() < timeoutAt) {
+
+
+
+
+
+
+
+    const receipt = await caver.klay.getTransactionReceipt(txHash);
+
+
+
+
+
+
+
+    if (receipt) {
+
+
+
+
+
+
+
+      return receipt;
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  throw new Error("트랜잭션 영수증을 확인할 수 없습니다.");
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function withTimeout(promise, timeoutMs, timeoutMessage) {
+
+
+
+
+
+
+
+  let timeoutId;
+
+
+
+
+
+
+
+  const timeoutPromise = new Promise((_, reject) => {
+
+
+
+
+
+
+
+    timeoutId = setTimeout(() => reject(new Error(timeoutMessage)), timeoutMs);
+
+
+
+
+
+
+
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timeoutId));
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function initModalClose() {
+
+
+
+
+
+
+
+  const overlay = qs("#overlay");
+
+
+
+
+
+
+
+  const closeBtn = qs("#close-modal");
+
+
+
+
+
+
+
+  if (!overlay || !closeBtn) return;
+
+
+
+
+
+
+
+  overlay.addEventListener("click", closeModal);
+
+
+
+
+
+
+
+  closeBtn.addEventListener("click", closeModal);
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function loadMetrics() {
+
+
+
+
+
+
+
+  const raw = localStorage.getItem(METRICS_KEY);
+
+
+
+
+
+
+
+  if (!raw) return {};
+
+
+
+
+
+
+
+  try {
+
+
+
+
+
+
+
+    return JSON.parse(raw);
+
+
+
+
+
+
+
+  } catch (error) {
+
+
+
+
+
+
+
+    console.error("Failed to parse metrics", error);
+
+
+
+
+
+
+
+    return {};
+
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function renderMetricsTable(productId, productName) {
+  const metrics = loadMetrics();
+  const productMetrics = metrics[productId] || {};
+  const dates = Object.keys(productMetrics).sort().reverse();
+
+  if (!dates.length) {
+    return `<p class="notice">아직 수집된 데이터가 없습니다.</p>`;
+  }
+
+  const rows = dates
+    .map((date) => {
+      const day = productMetrics[date] || {};
+      return `
+        <tr>
+          <td>${date}</td>
+          <td>${getMetricCount(day, "detail_view")}</td>
+          <td>${getMetricCount(day, "pay_click")}</td>
+          <td>${getMetricCount(day, "usdt_click")}</td>
+          <td>${getMetricCount(day, "other_pay_click")}</td>
+          <td>${getMetricCount(day, "pay_close")}</td>
+          <td>${getMetricCount(day, "usdt_complete")}</td>
+        </tr>
+      `;
+    })
+    .join("");
+
+  return `
+    <div class="notice" style="margin-bottom: 12px;">
+      ${productName} ? 일별 unique 유저 기준
+    </div>
+    <div style="overflow-x: auto;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+        <thead>
+          <tr style="text-align: left; border-bottom: 1px solid var(--line);">
+            <th style="padding: 8px 6px;">일자</th>
+            <th style="padding: 8px 6px;">상품 상세장 클릭</th>
+            <th style="padding: 8px 6px;">결제 클릭</th>
+            <th style="padding: 8px 6px;">USDT 클릭</th>
+            <th style="padding: 8px 6px;">그 외 결제 클릭</th>
+            <th style="padding: 8px 6px;">X 클릭</th>
+            <th style="padding: 8px 6px;">USDT 결제</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function getMetricCount(day, key) {
+
+
+
+
+
+
+
+  if (!day || !day[key] || !Array.isArray(day[key].users)) return 0;
+
+
+
+
+
+
+
+  return day[key].users.length;
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+renderProductList();
+
+
+
+
+
+
+
+renderAdmin();
+
+
+
+
+
+
+
+renderProductDetail();
+
+
+
+
+
+
+
+initModalClose();
+
+
+
+
+
+
+
+initAdminAuth();

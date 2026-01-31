@@ -1,0 +1,693 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Olive Young Mobile Coupon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="https://static.kaiawallet.io/js/dapp-portal-sdk-1.4.4.js"></script>
+</head>
+<body class="bg-[#f6f7f9] text-neutral-900">
+  <div class="max-w-6xl mx-auto px-5 md:px-8 py-6">
+    <header class="flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl bg-neutral-900 text-white grid place-items-center font-bold">S</div>
+        <span class="text-sm font-semibold tracking-[0.2em] text-neutral-700">STABLE MARKET</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="admin.html" class="text-sm font-medium text-neutral-600 hover:text-neutral-900">Admin</a>
+      </div>
+    </header>
+
+    <section class="mt-6 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-8">
+      <main class="space-y-6">
+        <div class="rounded-3xl bg-white shadow-sm border border-neutral-100 overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-0">
+            <div class="relative">
+              <img id="imageCard" src="./assets/olive_card.png" alt="Olive Young coupon" class="h-[260px] md:h-[360px] w-full object-cover"
+                onerror="this.onerror=null;this.src='https://placehold.co/900x700?text=Coupon';" />
+              <span class="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-orange-600">Mobile Voucher</span>
+            </div>
+            <div class="relative">
+              <img id="imageGallery" src="./assets/olive_gallery.png" alt="Olive Young promo" class="h-[200px] md:h-[360px] w-full object-cover"
+                onerror="this.onerror=null;this.src='https://placehold.co/900x700?text=Gallery';" />
+            </div>
+          </div>
+          <div class="p-6">
+            <h1 id="productTitle" class="text-2xl md:text-3xl font-semibold">OLIVE YOUNG Mobile Coupon (Cash Voucher)</h1>
+            <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-neutral-600">
+              <span class="inline-flex items-center gap-1.5">
+                <span class="text-orange-500">*</span>
+                <span class="font-medium text-neutral-800">4.8/5</span>
+              </span>
+              <span>1.6K reviews</span>
+              <span>10M+ Purchased</span>
+              <span class="inline-flex items-center gap-1.5">
+                <span class="text-neutral-500">Location</span>
+                <span>Olive Young</span>
+              </span>
+            </div>
+            <div class="mt-5 grid gap-3 md:grid-cols-3">
+              <div class="rounded-2xl border border-neutral-100 bg-[#fff7f2] p-4 text-sm">
+                <div class="font-semibold text-neutral-900">Instant use</div>
+                <div class="mt-1 text-neutral-600">Mobile voucher, show at store</div>
+              </div>
+              <div class="rounded-2xl border border-neutral-100 bg-white p-4 text-sm">
+                <div class="font-semibold text-neutral-900">Flexible booking</div>
+                <div class="mt-1 text-neutral-600">Use anytime during validity</div>
+              </div>
+              <div class="rounded-2xl border border-neutral-100 bg-white p-4 text-sm">
+                <div class="font-semibold text-neutral-900">USDT discount</div>
+                <div class="mt-1 text-neutral-600">Pay with USDT for extra savings</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="rounded-3xl bg-white border border-neutral-100 p-6 shadow-sm">
+          <div class="flex items-start gap-4">
+            <div class="w-1.5 rounded-full bg-orange-500 mt-2 h-10"></div>
+            <div>
+              <h2 class="text-xl font-semibold mb-3">What to expect</h2>
+              <div class="rounded-2xl border border-neutral-100 bg-neutral-50 p-3">
+                <img id="detailImage" src="" alt="Product detail" class="w-full rounded-xl object-cover max-h-[720px]"
+                  onerror="this.onerror=null;this.src='https://placehold.co/1200x1600?text=Detail+Image';" />
+              </div>
+              <div id="detailFallback" class="text-neutral-700 leading-7 space-y-4 mt-6">
+                <p class="font-semibold">Discover the Best of K-Beauty with Olive Young Mobile Coupon!</p>
+                <p>
+                  <strong>OLIVE YOUNG</strong> is Korea's No.1 health and beauty retailer, offering a massive
+                  selection of skincare, makeup, wellness, and lifestyle essentials. Enjoy a seamless mobile
+                  coupon experience that gives you access to exclusive promotions and in-store perks.
+                </p>
+                <p class="italic">
+                  Whether you're a K-beauty enthusiast or a first-time shopper, this coupon helps you save while
+                  exploring the hottest trends.
+                </p>
+                <p class="font-semibold">OLIVE YOUNG x Everland</p>
+                <p>
+                  Celebrate a vibrant collaboration with limited-time rewards and themed bundles inspired by Korea's
+                  most iconic experiences.
+                </p>
+                <p class="font-semibold">Exclusive Seasonal Package</p>
+                <p>
+                  Seasonal curation ensures you're always getting the freshest picks—perfect for gifting or
+                  restocking your routine.
+                </p>
+                <p class="font-semibold">The Ultimate K-Vibe Bundle Just for You!</p>
+                <p>
+                  Stack your mobile coupon with ongoing promotions to unlock maximum value, and earn Klook credits
+                  along the way.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="lg:sticky lg:top-6 h-fit">
+        <div class="rounded-3xl bg-white border border-neutral-100 shadow-sm p-6 space-y-5">
+          <div>
+            <div id="priceDisplay" class="text-3xl font-semibold mt-2">US$ 3.45</div>
+            <div id="discountDisplay" class="text-sm text-orange-600 font-medium mt-3">USDT payment gets 10% off</div>
+          </div>
+          <button id="openPurchase" class="w-full rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3.5" onclick="document.getElementById('paymentModal')?.classList.remove('hidden'); document.getElementById('paymentModal')?.classList.add('flex');">
+            Buy Now
+          </button>
+        </div>
+      </aside>
+    </section>
+  </div>
+
+  <div id="galleryModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-lg max-w-3xl w-[92%] md:w-full p-4 md:p-6 relative">
+      <button id="closeGallery" class="absolute top-3 right-3 text-neutral-500 hover:text-neutral-800">x</button>
+      <div class="flex gap-3 mb-4">
+        <button data-tab="card" class="tab-btn px-4 py-2 rounded-full text-sm font-medium bg-orange-500 text-white">Coupon</button>
+        <button data-tab="gallery" class="tab-btn px-4 py-2 rounded-full text-sm font-medium bg-neutral-100 text-neutral-700">Gallery</button>
+      </div>
+      <div id="tab-card" class="tab-panel">
+        <img id="modalCard" src="./assets/olive_card.png" alt="Olive Young coupon large" class="w-full rounded-xl object-cover"
+          onerror="this.onerror=null;this.src='https://placehold.co/1000x700?text=Coupon';" />
+      </div>
+      <div id="tab-gallery" class="tab-panel hidden">
+        <img id="modalGallery" src="./assets/olive_gallery.png" alt="Olive Young gallery large" class="w-full rounded-xl object-cover"
+          onerror="this.onerror=null;this.src='https://placehold.co/1000x700?text=Gallery';" />
+      </div>
+    </div>
+  </div>
+
+  <div id="paymentModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-lg max-w-lg w-[92%] md:w-full p-5 md:p-6 relative">
+      <button id="closePayment" class="absolute top-3 right-3 text-neutral-500 hover:text-neutral-800" onclick="document.getElementById('paymentModal')?.classList.add('hidden'); document.getElementById('paymentModal')?.classList.remove('flex');">x</button>
+      <h3 class="text-lg font-semibold mb-4">결제수단</h3>
+      <div class="grid gap-3">
+        <button id="usdtPay" class="w-full rounded-xl border border-orange-500 bg-orange-50 px-4 py-3 text-sm font-semibold text-orange-600">
+          USDT 결제 (<span id="usdtDiscountPercent"></span>% 할인)
+          <span class="block text-xs font-normal text-orange-600/80 mt-1" id="usdtDiscountHint"></span>
+          <span class="block text-xs font-normal text-orange-600/80" id="usdtDiscountAmount"></span>
+        </button>
+        <div class="rounded-xl border border-neutral-200 bg-white px-4 py-3">
+          <div class="text-xs font-semibold text-neutral-500 mb-3">신용·체크카드</div>
+          <div class="grid grid-cols-5 gap-3 text-xs text-neutral-700">
+            <button class="card-option flex flex-col items-center gap-1" data-card="shinhan">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">S</span>
+              <span>신한</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="kb">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">K</span>
+              <span>국민</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="hana">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">H</span>
+              <span>하나</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="bc">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">BC</span>
+              <span>비씨</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="samsung">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">S</span>
+              <span>삼성</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="lotte">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">L</span>
+              <span>롯데</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="kakao">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">K</span>
+              <span>카카오</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="toss">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">T</span>
+              <span>토스</span>
+            </button>
+            <button class="card-option flex flex-col items-center gap-1" data-card="kbank">
+              <span class="h-8 w-8 rounded-full bg-neutral-100 grid place-items-center">K</span>
+              <span>케이뱅크</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="usdtModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-lg max-w-xl w-[92%] md:w-full p-5 md:p-6 relative">
+      <button id="closeUsdt" class="absolute top-3 right-3 text-neutral-500 hover:text-neutral-800">x</button>
+      <h3 class="text-lg font-semibold mb-4">USDT 결제</h3>
+      <div class="space-y-3 text-sm text-neutral-700">
+        <div><strong>결제 금액</strong> <span id="payAmount"></span> USDT (<span id="payDiscount"></span>% 할인)</div>
+        <div><strong>수신 지갑</strong> <span id="payWallet"></span></div>
+        <div><strong>컨펌 기준</strong> 1컨펌 확인 완료 시 결제 완료</div>
+      </div>
+      <div class="mt-5 grid gap-3">
+        <button id="confirmPay" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl">
+          결제 진행
+        </button>
+      </div>
+      <div id="txStatus" class="mt-4 text-sm text-neutral-600 bg-orange-50 border border-orange-100 rounded-xl px-4 py-3 hidden"></div>
+      <div id="walletHelp" class="mt-3 text-sm text-neutral-600 bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 hidden"></div>
+      <div id="phoneForm" class="mt-4 hidden">
+        <label class="text-sm text-neutral-600">휴대폰 번호</label>
+        <input id="phoneInput" class="mt-2 w-full border border-neutral-200 rounded-xl px-4 py-3" placeholder="010-0000-0000" />
+        <button id="completePay" class="mt-3 w-full bg-neutral-900 hover:bg-neutral-800 text-white font-semibold py-3 rounded-xl">
+          구매 완료
+        </button>
+        <p class="mt-2 text-xs text-neutral-500">상품은 구매 후 1일 뒤 배송됩니다. 인터뷰 참여 시 3만원 쿠폰 지급.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'usdt_products_v1';
+    const METRICS_KEY = 'usdt_metrics_v1';
+    const VISITOR_KEY = 'usdt_visitor_id';
+    const DEFAULT_PRODUCT = {
+      id: 'p-olive',
+      name: 'OLIVE YOUNG Mobile Coupon (Cash Voucher)',
+      priceUsdt: 3.45,
+      usdtDiscount: 10,
+      usdtWallet: '0x0000000000000000000000000000000000000000',
+      imageCardUrl: './assets/olive_card.png',
+      imageGalleryUrl: './assets/olive_gallery.png',
+      detailImageUrl: '',
+      active: true,
+    };
+
+    const DAPP_PORTAL_CLIENT_ID = '7a04cfc8-3765-4fc9-b719-d61791781697';
+    const DAPP_PORTAL_CHAIN_ID = '8217';
+    const USDT_CONTRACT = '0xd077a400968890eacc75cdc901f0356c943e4fdb';
+    const CONFIRMATIONS_REQUIRED = 1;
+
+    const productTitle = document.getElementById('productTitle');
+    const priceDisplay = document.getElementById('priceDisplay');
+    const discountDisplay = document.getElementById('discountDisplay');
+    const imageCard = document.getElementById('imageCard');
+    const imageGallery = document.getElementById('imageGallery');
+    const modalCard = document.getElementById('modalCard');
+    const modalGallery = document.getElementById('modalGallery');
+    const detailImage = document.getElementById('detailImage');
+    const detailFallback = document.getElementById('detailFallback');
+
+    const galleryModal = document.getElementById('galleryModal');
+    const openGallery = document.getElementById('openGallery');
+    const closeGallery = document.getElementById('closeGallery');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabCard = document.getElementById('tab-card');
+    const tabGallery = document.getElementById('tab-gallery');
+
+    const paymentModal = document.getElementById('paymentModal');
+    const openPurchase = document.getElementById('openPurchase');
+    const closePayment = document.getElementById('closePayment');
+    const usdtDiscountPercent = document.getElementById('usdtDiscountPercent');
+    const usdtPay = document.getElementById('usdtPay');
+    const usdtDiscountHint = document.getElementById('usdtDiscountHint');
+    const usdtDiscountAmount = document.getElementById('usdtDiscountAmount');
+
+    const usdtModal = document.getElementById('usdtModal');
+    const closeUsdt = document.getElementById('closeUsdt');
+    const confirmPay = document.getElementById('confirmPay');
+    const txStatus = document.getElementById('txStatus');
+    const walletHelp = document.getElementById('walletHelp');
+    const phoneForm = document.getElementById('phoneForm');
+    const payAmount = document.getElementById('payAmount');
+    const payWallet = document.getElementById('payWallet');
+    const payDiscount = document.getElementById('payDiscount');
+    const phoneInput = document.getElementById('phoneInput');
+    const completePay = document.getElementById('completePay');
+
+    const product = getActiveProduct();
+    const basePrice = Number(product.priceUsdt || DEFAULT_PRODUCT.priceUsdt);
+    const discount = Number(product.usdtDiscount ?? DEFAULT_PRODUCT.usdtDiscount);
+    const discountedAmount = Number((basePrice * (1 - discount / 100)).toFixed(2));
+    const discountAmount = Number((basePrice * (discount / 100)).toFixed(2));
+
+    productTitle.textContent = product.name || DEFAULT_PRODUCT.name;
+    document.title = productTitle.textContent;
+    priceDisplay.textContent = `US$ ${basePrice.toFixed(2)}`;
+    discountDisplay.textContent = `USDT payment gets ${discount}% off`;
+    payAmount.textContent = discountedAmount.toFixed(2);
+    payWallet.textContent = product.usdtWallet || DEFAULT_PRODUCT.usdtWallet;
+    payDiscount.textContent = discount;
+    usdtDiscountPercent.textContent = discount;
+    usdtDiscountHint.textContent = `할인 후 ${formatPrice(discountedAmount)} USDT 결제`;
+    usdtDiscountAmount.textContent = `할인 금액: ${formatPrice(discountAmount)} USDT`;
+
+    applyImage(imageCard, product.imageCardUrl, DEFAULT_PRODUCT.imageCardUrl);
+    applyImage(imageGallery, product.imageGalleryUrl, DEFAULT_PRODUCT.imageGalleryUrl);
+    applyImage(modalCard, product.imageCardUrl, DEFAULT_PRODUCT.imageCardUrl);
+    applyImage(modalGallery, product.imageGalleryUrl, DEFAULT_PRODUCT.imageGalleryUrl);
+    applyDetailImage(detailImage, detailFallback, product.detailImageUrl);
+
+    let walletProvider = null;
+    let dappPortalSdkRef = null;
+    let dappPortalInitPromise = null;
+
+    console.info('[DappPortal] clientId', DAPP_PORTAL_CLIENT_ID);
+    initDappPortal();
+    logMetric(product.id, 'detail_view');
+
+    function applyImage(element, primary, fallback) {
+      if (primary) {
+        element.src = primary;
+        return;
+      }
+      element.src = fallback;
+    }
+
+    function applyDetailImage(imageEl, fallbackEl, url) {
+      if (!imageEl || !fallbackEl) return;
+      if (url) {
+        imageEl.src = url;
+        imageEl.classList.remove('hidden');
+        fallbackEl.classList.add('hidden');
+        return;
+      }
+      imageEl.src = 'https://placehold.co/1200x1600?text=Detail+Image';
+      imageEl.classList.add('hidden');
+      fallbackEl.classList.remove('hidden');
+    }
+
+    function getActiveProduct() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return DEFAULT_PRODUCT;
+      try {
+        const products = JSON.parse(raw);
+        const active = products.find((item) => item.active);
+        return active || DEFAULT_PRODUCT;
+      } catch (error) {
+        return DEFAULT_PRODUCT;
+      }
+    }
+
+    async function initDappPortal() {
+      if (!String(DAPP_PORTAL_CLIENT_ID || '').trim() || DAPP_PORTAL_CLIENT_ID === 'YOUR_CLIENT_ID') {
+        console.warn('Set DAPP_PORTAL_CLIENT_ID to enable wallet connection.');
+        return;
+      }
+
+      if (walletProvider) return;
+      if (dappPortalInitPromise) return dappPortalInitPromise;
+
+      dappPortalInitPromise = (async () => {
+        if (!dappPortalSdkRef) {
+          try {
+            dappPortalSdkRef = await loadDappPortalSdk();
+          } catch (error) {
+            console.error('Failed to load Dapp Portal SDK', error);
+            throw new Error('Dapp Portal SDK load failed.');
+          }
+        }
+
+        const sdk = await dappPortalSdkRef.init({
+          clientId: DAPP_PORTAL_CLIENT_ID,
+          chainId: DAPP_PORTAL_CHAIN_ID,
+        });
+
+        if (!sdk.isSupportedBrowser()) {
+          await sdk.showUnsupportedBrowserGuide();
+          throw new Error('Unsupported browser for Dapp Portal.');
+        }
+
+        walletProvider = sdk.getWalletProvider();
+        return walletProvider;
+      })();
+
+      return dappPortalInitPromise;
+    }
+
+    function loadDappPortalSdk() {
+      if (window.DappPortalSDK) return Promise.resolve(window.DappPortalSDK);
+
+      return new Promise((resolve, reject) => {
+        const existing = document.querySelector('script[data-dapp-portal-sdk]');
+        if (existing) {
+          existing.addEventListener('load', () => resolve(window.DappPortalSDK));
+          existing.addEventListener('error', () => reject(new Error('Dapp Portal SDK script failed to load.')));
+          return;
+        }
+
+        const script = document.createElement('script');
+        script.src = 'https://static.kaiawallet.io/js/dapp-portal-sdk-1.4.4.js';
+        script.async = true;
+        script.dataset.dappPortalSdk = '1';
+        script.onload = () => resolve(window.DappPortalSDK);
+        script.onerror = () => reject(new Error('Dapp Portal SDK script failed to load.'));
+        document.head.appendChild(script);
+      });
+    }
+
+    function openModal(modal) {
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function getVisitorId() {
+      const existing = localStorage.getItem(VISITOR_KEY);
+      if (existing) return existing;
+      const id = (window.crypto && window.crypto.randomUUID)
+        ? window.crypto.randomUUID()
+        : `v-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      localStorage.setItem(VISITOR_KEY, id);
+      return id;
+    }
+
+    function getTodayKey() {
+      const now = new Date();
+      return now.toISOString().slice(0, 10);
+    }
+
+    function logMetric(productId, key) {
+      if (!productId || !key) return;
+      const metrics = JSON.parse(localStorage.getItem(METRICS_KEY) || '{}');
+      const dateKey = getTodayKey();
+      const visitorId = getVisitorId();
+      if (!metrics[productId]) metrics[productId] = {};
+      if (!metrics[productId][dateKey]) metrics[productId][dateKey] = {};
+      if (!metrics[productId][dateKey][key]) {
+        metrics[productId][dateKey][key] = { users: [] };
+      }
+      const bucket = metrics[productId][dateKey][key];
+      if (!bucket.users.includes(visitorId)) {
+        bucket.users.push(visitorId);
+      }
+      localStorage.setItem(METRICS_KEY, JSON.stringify(metrics));
+    }
+    function closeModal(modal) {
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    if (openGallery) {
+      openGallery.addEventListener('click', () => openModal(galleryModal));
+    }
+    if (imageGallery) {
+      imageGallery.addEventListener('click', () => openModal(galleryModal));
+    }
+    if (closeGallery) {
+      closeGallery.addEventListener('click', () => closeModal(galleryModal));
+    }
+    if (galleryModal) {
+      galleryModal.addEventListener('click', (e) => {
+        if (e.target === galleryModal) closeModal(galleryModal);
+      });
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.className = 'tab-btn px-4 py-2 rounded-full text-sm font-medium bg-neutral-100 text-neutral-700');
+        btn.className = 'tab-btn px-4 py-2 rounded-full text-sm font-medium bg-orange-500 text-white';
+        if (btn.dataset.tab === 'card') {
+          tabCard.classList.remove('hidden');
+          tabGallery.classList.add('hidden');
+        } else {
+          tabGallery.classList.remove('hidden');
+          tabCard.classList.add('hidden');
+        }
+      });
+    });
+
+    if (openPurchase) {
+      openPurchase.addEventListener('click', () => {
+        logMetric(product.id, 'pay_click');
+        openModal(paymentModal);
+      });
+    }
+    if (closePayment) {
+      closePayment.addEventListener('click', () => {
+        logMetric(product.id, 'pay_close');
+        closeModal(paymentModal);
+      });
+    }
+    if (paymentModal) {
+      paymentModal.addEventListener('click', (e) => {
+        if (e.target === paymentModal) {
+          logMetric(product.id, 'pay_close');
+          closeModal(paymentModal);
+        }
+      });
+    }
+
+    document.querySelectorAll('.card-option').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!product.cardUrl) {
+          alert('카드 결제 URL이 등록되지 않았습니다.');
+          return;
+        }
+        logMetric(product.id, 'other_pay_click');
+        window.location.href = product.cardUrl;
+      });
+    });
+
+    if (usdtPay) {
+      usdtPay.addEventListener('click', () => {
+        logMetric(product.id, 'usdt_click');
+        closeModal(paymentModal);
+        resetPaymentUI();
+        openModal(usdtModal);
+      });
+    }
+    if (closeUsdt) {
+      closeUsdt.addEventListener('click', () => closeModal(usdtModal));
+    }
+    if (usdtModal) {
+      usdtModal.addEventListener('click', (e) => {
+        if (e.target === usdtModal) closeModal(usdtModal);
+      });
+    }
+
+    if (confirmPay) {
+      confirmPay.addEventListener('click', async () => {
+        confirmPay.disabled = true;
+        confirmPay.textContent = 'Processing...';
+        txStatus.classList.remove('hidden');
+        txStatus.textContent = 'Connecting Dapp Portal Wallet...';
+        walletHelp.classList.add('hidden');
+
+      try {
+        if (!walletProvider) {
+          await initDappPortal();
+        }
+        if (!walletProvider) {
+          throw new Error('Dapp Portal SDK is not initialized.');
+        }
+
+        const account = await requestAccount(walletProvider);
+        txStatus.textContent = 'Creating USDT transaction...';
+
+        const txHash = await sendUsdtTransfer({
+          provider: walletProvider,
+          from: account,
+          to: product.usdtWallet || DEFAULT_PRODUCT.usdtWallet,
+          amount: discountedAmount,
+        });
+
+        txStatus.textContent = `Sent (TX: ${txHash.slice(0, 10)}...) -> waiting for ${CONFIRMATIONS_REQUIRED} confirmation`; 
+        await waitForConfirmations(walletProvider, txHash, CONFIRMATIONS_REQUIRED);
+        txStatus.textContent = 'Payment confirmed. Thank you!';
+        logMetric(product.id, 'usdt_complete');
+        phoneForm.classList.remove('hidden');
+        confirmPay.textContent = 'Completed';
+      } catch (error) {
+        confirmPay.disabled = false;
+        confirmPay.textContent = '결제 진행';
+        txStatus.textContent = error.message || '결제 처리 중 오류가 발생했습니다.';
+        walletHelp.classList.remove('hidden');
+        walletHelp.innerHTML = '<strong>Wallet help</strong><br />1) Check wallet selection popup<br />2) Ensure domain is registered in Dapp Portal<br />3) Use https for better reliability<br />4) Local test is recommended on http://localhost:3000';
+      }
+    });
+    }
+
+    if (completePay) {
+      completePay.addEventListener('click', () => {
+        if (!phoneInput.value.trim()) {
+          alert('휴대폰 번호를 입력해주세요.');
+          return;
+        }
+        alert('결제가 완료되었습니다. 상품은 구매 후 1일 뒤 배송됩니다.');
+        closeModal(usdtModal);
+      });
+    }
+
+    function resetPaymentUI() {
+      confirmPay.disabled = false;
+      confirmPay.textContent = '결제 진행';
+      txStatus.classList.add('hidden');
+      walletHelp.classList.add('hidden');
+      phoneForm.classList.add('hidden');
+      phoneInput.value = '';
+    }
+
+    function formatPrice(value) {
+      return Number(value).toLocaleString('ko-KR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
+
+    async function requestAccount(provider) {
+      const accounts = await provider.request({ method: 'kaia_requestAccounts' });
+      if (!accounts || !accounts[0]) {
+        throw new Error('No wallet account found.');
+      }
+      return accounts[0];
+    }
+
+    async function sendUsdtTransfer({ provider, from, to, amount }) {
+      if (!window.ethers) {
+        throw new Error('ethers not available.');
+      }
+      if (!to || !to.startsWith('0x')) {
+        throw new Error('Invalid receiver address.');
+      }
+
+      const decimals = await getTokenDecimals(provider);
+      const iface = new window.ethers.utils.Interface([
+        'function transfer(address recipient,uint256 amount)'
+      ]);
+      const data = iface.encodeFunctionData('transfer', [to, window.ethers.utils.parseUnits(String(amount), decimals)]);
+
+      const tx = {
+        from,
+        to: USDT_CONTRACT,
+        value: '0x0',
+        data,
+      };
+
+      tx.gas = await estimateGas(provider, tx);
+
+      const txHash = await provider.request({ method: 'kaia_sendTransaction', params: [tx] });
+      return txHash;
+    }
+
+    async function getTokenDecimals(provider) {
+      const data = '0x313ce567';
+      const result = await provider.request({
+        method: 'kaia_call',
+        params: [
+          { to: USDT_CONTRACT, data },
+          'latest'
+        ]
+      });
+      return parseInt(result, 16);
+    }
+
+    async function estimateGas(provider, tx) {
+      try {
+        const gasHex = await provider.request({ method: 'kaia_estimateGas', params: [tx] });
+        const gas = window.ethers.BigNumber.from(gasHex);
+        return gas.mul(120).div(100).toHexString();
+      } catch (error) {
+        return '0x493E0';
+      }
+    }
+
+    async function waitForConfirmations(provider, txHash, confirmations) {
+      const receipt = await waitForReceipt(provider, txHash);
+      const targetBlock = Number(receipt.blockNumber) + confirmations;
+      const timeoutAt = Date.now() + 5 * 60 * 1000;
+
+      while (Date.now() < timeoutAt) {
+        const currentBlockHex = await provider.request({ method: 'kaia_blockNumber' });
+        const currentBlock = parseInt(currentBlockHex, 16);
+        if (currentBlock >= targetBlock) {
+          return;
+        }
+        await sleep(2000);
+      }
+
+      throw new Error('Confirmation timeout.');
+    }
+
+    async function waitForReceipt(provider, txHash) {
+      const timeoutAt = Date.now() + 3 * 60 * 1000;
+
+      while (Date.now() < timeoutAt) {
+        const receipt = await provider.request({ method: 'kaia_getTransactionReceipt', params: [txHash] });
+        if (receipt) {
+          return receipt;
+        }
+        await sleep(2000);
+      }
+
+      throw new Error('Transaction receipt not found.');
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeModal(galleryModal);
+        closeModal(paymentModal);
+        closeModal(usdtModal);
+      }
+    });
+  </script>
+</body>
+</html>

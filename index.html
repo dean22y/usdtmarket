@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>USDT Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;600&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="brand">USDT MARKET</div>
+    <nav>
+      <a href="index.html">상품</a>
+      <a href="admin.html">어드민</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="badge">Kaia Wallet · 1컨펌 결제</div>
+      <h1>프로모션별 카드/USDT 결제 가능한 상품 마켓</h1>
+      <p>USDT 결제 시 즉시 할인, 카드 결제는 프로모션 URL로 안전하게 이동합니다. 상품은 구매 후 1일 뒤 일괄 배송됩니다.</p>
+      <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
+        <a class="button" href="#products">상품 보러가기</a>
+        <a class="button secondary" href="admin.html">어드민 등록</a>
+      </div>
+    </div>
+    <div class="card fade-in">
+      <h3>구매 프로세스</h3>
+      <p>상품 선택 → 카드/USDT 결제 → 휴대폰 번호 입력 → SMS로 상품 전달</p>
+      <div class="notice" style="margin-top: 12px;">인터뷰 참여 시 3만원 쿠폰 지급</div>
+    </div>
+  </section>
+
+  <div id="products" class="section-title">상품 리스트</div>
+  <section class="grid" id="product-grid"></section>
+
+  <script src="app.js?v=3"></script>
+</body>
+</html>
